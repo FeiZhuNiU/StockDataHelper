@@ -17,11 +17,19 @@ import java.net.URL;
 
 public class Utils {
 
-    public static String url_pre = "http://table.finance.yahoo.com/table.csv?s=";
-    public static String url_post= ".ss";
+    private static String url_pre = "http://table.finance.yahoo.com/table.csv?s=";
+    private static String url_post= ".ss";
 
-    public static boolean downloadData(String uri, String saveDir)
+    /**
+     *
+     * @param code the stock code
+     * @param saveDir include file name
+     * @return false if failed to download data
+     */
+    public static boolean downloadData(String code, String saveDir)
     {
+        String uri = url_pre + code + url_post;
+
         InputStream is =null;
         FileOutputStream fos = null;
         boolean ret = false;

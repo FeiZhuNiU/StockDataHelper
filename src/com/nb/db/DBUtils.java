@@ -8,6 +8,9 @@ package com.nb.db;
  +===========================================================================*/
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.sql.*;
 
 public class DBUtils {
@@ -70,6 +73,7 @@ public class DBUtils {
     }
 
     public static boolean createTable(String table, String... colInfos){
+        dropTable(table);
         String sql = "CREATE TABLE "+ table + " (";
         int size = colInfos.length;
         for(int i = 0 ; i < size; ++i){
@@ -85,6 +89,42 @@ public class DBUtils {
     {
         String sql = "DROP TABLE "+ table+";";
         return excute(sql);
+    }
+
+    public static void importDataFromCsv(int stockNum, String tableName, String fileName) {
+        File csvFile = new File(fileName);
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+            String line = null;
+            line = reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] datas = line.split(",");
+                if (datas.length != 7)
+                    continue;
+                String sql = "INSERT INTO " + tableName + " VALUES (";
+                for(int i = 0 ; i < 7 ; ++i){
+                    sql += ("'" + datas[i] + "'");
+                    if(i != 6)
+                        sql+=",";
+                }
+                sql+=");";
+                DBUtils.excute(sql);
+
+                sql = "INSERT INTO demotable VALUES (" + stockNum + ",";
+                for(int i = 0 ; i < 7 ; ++i){
+                    sql += ("'" + datas[i] + "'");
+                    if(i != 6)
+                        sql+=",";
+                }
+                sql+=");";
+                DBUtils.excute(sql);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
