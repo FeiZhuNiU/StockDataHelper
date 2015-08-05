@@ -15,8 +15,7 @@ public class StockHelper {
     public static void main(String[] args) {
 
         DBUtils.connectDB();
-//        DBUtils.dropTable("Stock");
-        DBUtils.createTable("Stock", "code INT", "name VARCHAR(20)");
+        DBUtils.createTable(DBUtils.TABLE_STOCK, "code INT", "name VARCHAR(20)");
         DBUtils.createTable("demotable","code VARCHAR(10)","date VARCHAR(20)", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volumn VARCHAR(20)", "adjust_close VARCHAR(20)");
 
         for (int stockNum = 600000; stockNum < 600040; ++stockNum) {
@@ -32,17 +31,17 @@ public class StockHelper {
     }
 
     private static void processStockNum(int stockNum) {
-        
+
         long startTime = System.currentTimeMillis();
 
         String fileName = "D:/stock/" + stockNum + ".csv";
 
         if (Utils.downloadData(String.valueOf(stockNum), fileName)) {
 
-            DBUtils.excute("INSERT INTO Stock (code) VALUES (" + stockNum + ");");
+            DBUtils.excute("INSERT INTO "+DBUtils.TABLE_STOCK+" (code) VALUES (" + stockNum + ");");
 
             String tableName = "SH"+String.valueOf(stockNum);
-//            DBUtils.dropTable(tableName);
+
             DBUtils.createTable(tableName, "date VARCHAR(20)", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volumn VARCHAR(20)", "adjust_close VARCHAR(20)");
 
             DBUtils.importDataFromCsv(stockNum,tableName, fileName);

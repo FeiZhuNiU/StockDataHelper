@@ -19,6 +19,8 @@ public class DBUtils {
     private static Connection connection = null;
     private static Statement statement = null;
 
+    public final static String TABLE_STOCK = "Stock";
+
     public static boolean connectDB() {
         boolean ret = true;
         try {
