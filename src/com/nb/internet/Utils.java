@@ -1,4 +1,4 @@
-package com.eric;
+package com.nb.internet;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
