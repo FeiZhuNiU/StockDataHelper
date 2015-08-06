@@ -10,5 +10,5 @@ package com.nb.stock;
 /**
  * °å¿éĞÅÏ¢
  */
-public class Field {
+public class Sector {
 }

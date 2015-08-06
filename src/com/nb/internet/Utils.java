@@ -18,19 +18,25 @@ import java.net.URL;
 public class Utils {
 
     private static String url_pre = "http://table.finance.yahoo.com/table.csv?s=";
-    private static String url_post= ".ss";
+    private static String url_post = ".ss";
+
+    public static String savePath_pre = "d:/stock/";
+    public static String savePath_post = ".csv";
+
 
     /**
-     *
-     * @param code the stock code
+     * @param code    the stock code
      * @param saveDir include file name
      * @return false if failed to download data
      */
-    public static boolean downloadData(String code, String saveDir)
-    {
-        String uri = url_pre + code + url_post;
+    public static boolean downloadData(int code) {
 
-        InputStream is =null;
+        long startTime = System.currentTimeMillis();
+
+        String uri = url_pre + code + url_post;
+        String saveDir = savePath_pre + code + savePath_post;
+
+        InputStream is = null;
         FileOutputStream fos = null;
         boolean ret = false;
 
@@ -39,7 +45,7 @@ public class Utils {
 
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("cn-proxy.jp.oracle.com", 80));
 
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection(proxy);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
 
             System.out.println("response code: " + connection.getResponseCode());
 //            Map<String,List<String>> map = connection.getHeaderFields();
@@ -59,25 +65,25 @@ public class Utils {
                 fos.write(buffer, 0, len);
             }
             ret = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
-            if(is !=null)
+        } finally {
+            if (is != null)
                 try {
                     is.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            if(fos!=null)
+            if (fos != null)
                 try {
                     fos.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
         }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time consumed: (download data " + code + ")" + (endTime - startTime) / 1000.0 + "s");
         return ret;
     }
 }

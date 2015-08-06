@@ -7,30 +7,31 @@ package com.nb.stock;
  |           Created by lliyu on 8/5/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import java.util.Date;
+import java.sql.Date;
 
 public class StockMetaData
 {
     private Stock stock;
+    private Date date;
     private double high;
     private double low;
     private double open;
     private double close;
-    private double volume;
+    private long volume;
     private double adjust_close;
-    private Date date;
+
 
     private double m5;
 
-    public StockMetaData(Stock stock, double high, double low, double open, double close, double volume, double adjust_close, Date date) {
+    public StockMetaData(Stock stock, Date date, double high, double low, double open, double close, long volume, double adjust_close) {
         this.stock = stock;
+        this.date = date;
         this.high = high;
         this.low = low;
         this.open = open;
         this.close = close;
         this.volume = volume;
         this.adjust_close = adjust_close;
-        this.date = date;
     }
 
     public Stock getStock() {
@@ -53,7 +54,7 @@ public class StockMetaData
         return close;
     }
 
-    public double getVolume() {
+    public long getVolume() {
         return volume;
     }
 
@@ -71,5 +72,20 @@ public class StockMetaData
 
     public void setM5(double m5) {
         this.m5 = m5;
+    }
+
+    @Override
+    public String toString() {
+        return "StockMetaData{" +
+                "stock=" + stock +
+                ", date=" + date +
+                ", high=" + high +
+                ", low=" + low +
+                ", open=" + open +
+                ", close=" + close +
+                ", volume=" + volume +
+                ", adjust_close=" + adjust_close +
+                ", m5=" + m5 +
+                '}';
     }
 }

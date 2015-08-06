@@ -9,20 +9,23 @@ package com.nb;
 
 import com.nb.db.DBUtils;
 import com.nb.internet.Utils;
+import com.nb.stock.Stock;
 
 public class StockHelper {
 
     public static void main(String[] args) {
 
         DBUtils.connectDB();
-        DBUtils.createTable(DBUtils.TABLE_STOCK, "code INT", "name VARCHAR(20)");
-        DBUtils.createTable("demotable","code VARCHAR(10)","date VARCHAR(20)", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volumn VARCHAR(20)", "adjust_close VARCHAR(20)");
+        DBUtils.resetTables();
 
-        for (int stockNum = 600000; stockNum < 600040; ++stockNum) {
+        for (int stockNum = 600000; stockNum < 600001; ++stockNum) {
 
-            System.out.println("current stock: " + stockNum);
+            System.out.println("Process stock: " + stockNum);
 
-            processStockNum(stockNum);
+            Stock stock = new Stock(stockNum);
+            processStock(stock);
+
+            DBUtils.addAndUpdateMA(stock, 5, "ma5", "VARCHAR(20)");
 
         }
 
@@ -30,31 +33,14 @@ public class StockHelper {
 
     }
 
-    private static void processStockNum(int stockNum) {
+    private static void processStock(Stock stock) {
 
-        long startTime = System.currentTimeMillis();
+        if (Utils.downloadData(stock.getCode())) {
+            DBUtils.insertIntoDB(stock);
 
-        String fileName = "D:/stock/" + stockNum + ".csv";
-
-        if (Utils.downloadData(String.valueOf(stockNum), fileName)) {
-
-            DBUtils.excute("INSERT INTO "+DBUtils.TABLE_STOCK+" (code) VALUES (" + stockNum + ");");
-
-            String tableName = "SH"+String.valueOf(stockNum);
-
-            DBUtils.createTable(tableName, "date VARCHAR(20)", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volumn VARCHAR(20)", "adjust_close VARCHAR(20)");
-
-            DBUtils.importDataFromCsv(stockNum,tableName, fileName);
-
-            long endTime = System.currentTimeMillis();
-
-            System.out.println("spend " +(endTime-startTime)/1000.0 + "s" );
-
-        }
-        else{
+        } else {
             System.out.println("no such stock");
         }
     }
-
 
 }

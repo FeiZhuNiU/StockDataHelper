@@ -7,22 +7,25 @@ package com.nb.stock;
  |           Created by lliyu on 8/5/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-public class Stock
-{
-    private String name;
-    private String code;
-    private CompanyInfo companyInfo;
-    private Field field;
+import com.nb.db.DBUtils;
 
-    public Stock(String code) {
+public class Stock {
+    private String name;
+    private int code;
+    private String table_name;
+    private CompanyInfo companyInfo;
+    private Sector sector;
+
+    public Stock(int code) {
         this.code = code;
+        table_name = DBUtils.TABLE_SH_PRE + code;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
@@ -30,7 +33,21 @@ public class Stock
         this.name = name;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getTableName() {
+        return table_name;
+    }
+
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "code=" + code +
+                ", name='" + name + '\'' +
+                ", companyInfo=" + companyInfo +
+                ", sector=" + sector +
+                '}';
     }
 }
