@@ -11,4 +11,5 @@ package com.nb.stock;
  * °å¿éĞÅÏ¢
  */
 public class Sector {
+    private String name;
 }

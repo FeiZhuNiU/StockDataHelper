@@ -9,8 +9,7 @@ package com.nb.stock;
 
 import java.sql.Date;
 
-public class StockMetaData
-{
+public class StockMetaData {
     private Stock stock;
     private Date date;
     private double high;

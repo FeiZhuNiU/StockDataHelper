@@ -8,8 +8,10 @@ package com.nb;
  +===========================================================================*/
 
 import com.nb.db.DBUtils;
-import com.nb.internet.Utils;
+import com.nb.internet.NetUtils;
 import com.nb.stock.Stock;
+
+import java.sql.Date;
 
 public class StockHelper {
 
@@ -18,14 +20,19 @@ public class StockHelper {
         DBUtils.connectDB();
         DBUtils.resetTables();
 
-        for (int stockNum = 600000; stockNum < 600001; ++stockNum) {
+        for (int stockCode = 600000; stockCode < 600001; ++stockCode) {
 
-            System.out.println("Process stock: " + stockNum);
+            System.out.println("Process stock: " + stockCode);
 
-            Stock stock = new Stock(stockNum);
-            processStock(stock);
+            Stock stock = new Stock(stockCode);
+            downloadDataToDB(stock);
+            DBUtils.addAndUpdateMACD(stock);
 
-            DBUtils.addAndUpdateMA(stock, 5, "ma5", "VARCHAR(20)");
+//            DBUtils.addAndUpdateMA(stock, 5, "ma5", "VARCHAR(20)");
+//            DBUtils.addAndUpdateMA(stock, 10, "ma10", "VARCHAR(20)");
+//            DBUtils.addAndUpdateMA(stock, 20, "ma20", "VARCHAR(20)");
+//            DBUtils.addAndUpdateMA(stock, 60, "ma60", "VARCHAR(20)");
+//            DBUtils.addAndUpdateMA(stock, 120, "ma120", "VARCHAR(20)");
 
         }
 
@@ -33,9 +40,9 @@ public class StockHelper {
 
     }
 
-    private static void processStock(Stock stock) {
+    private static void downloadDataToDB(Stock stock) {
 
-        if (Utils.downloadData(stock.getCode())) {
+        if (NetUtils.downloadData(stock.getCode())) {
             DBUtils.insertIntoDB(stock);
 
         } else {

@@ -15,7 +15,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 
-public class Utils {
+public class NetUtils {
 
     private static String url_pre = "http://table.finance.yahoo.com/table.csv?s=";
     private static String url_post = ".ss";

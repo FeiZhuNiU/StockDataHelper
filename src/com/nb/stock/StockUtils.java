@@ -24,11 +24,10 @@ public class StockUtils {
         DBUtils.connectDB();
         String sql = "SELECT * FROM " + stock.getTableName();
 
-        if(DBUtils.excute(sql))
-        {
+        if (DBUtils.excute(sql)) {
             try {
                 ResultSet resultSet = DBUtils.getStatement().getResultSet();
-                while(resultSet.next()){
+                while (resultSet.next()) {
                     Date date = resultSet.getDate(1);
                     double open = Double.parseDouble(resultSet.getString(2));
                     double high = Double.parseDouble(resultSet.getString(3));
@@ -37,7 +36,7 @@ public class StockUtils {
                     long volume = Long.parseLong(resultSet.getString(6));
                     double adjust_close = Double.parseDouble(resultSet.getString(7));
 
-                    StockMetaData metaData = new StockMetaData(stock,date,high,low,open,close,volume,adjust_close);
+                    StockMetaData metaData = new StockMetaData(stock, date, high, low, open, close, volume, adjust_close);
                     ret.add(metaData);
                 }
 

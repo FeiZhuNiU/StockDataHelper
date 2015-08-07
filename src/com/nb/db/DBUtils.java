@@ -8,16 +8,18 @@ package com.nb.db;
  +===========================================================================*/
 
 
-import com.nb.Utils.Calculator;
-import com.nb.internet.Utils;
+import com.nb.stock.index.Calculator;
+import com.nb.internet.NetUtils;
 import com.nb.stock.Stock;
 import com.nb.stock.StockMetaData;
 import com.nb.stock.StockUtils;
+import com.nb.stock.index.Macd;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.*;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -109,7 +111,7 @@ public class DBUtils {
 
     public static void importDataFromCsv(int stockCode, String tableName) {
 
-        String fileName = Utils.savePath_pre + stockCode + Utils.savePath_post;
+        String fileName = NetUtils.savePath_pre + stockCode + NetUtils.savePath_post;
 
         File csvFile = new File(fileName);
 
@@ -130,14 +132,14 @@ public class DBUtils {
                 sql += ");";
                 DBUtils.excute(sql);
 
-                sql = "INSERT INTO " + TABLE_BIG + " VALUES (" + stockCode + ",";
-                for (int i = 0; i < 7; ++i) {
-                    sql += ("'" + datas[i] + "'");
-                    if (i != 6)
-                        sql += ",";
-                }
-                sql += ");";
-                DBUtils.excute(sql);
+//                sql = "INSERT INTO " + TABLE_BIG + " VALUES (" + stockCode + ",";
+//                for (int i = 0; i < 7; ++i) {
+//                    sql += ("'" + datas[i] + "'");
+//                    if (i != 6)
+//                        sql += ",";
+//                }
+//                sql += ");";
+//                DBUtils.excute(sql);
 
             }
 
@@ -170,7 +172,7 @@ public class DBUtils {
 
         long endTime = System.currentTimeMillis();
 
-        System.out.println("Time consumed (insert data into db from "+stock.getCode()+".scv): " + (endTime - startTime) / 1000.0 + "s");
+        System.out.println("Time consumed (insert data into db from " + stock.getCode() + ".scv): " + (endTime - startTime) / 1000.0 + "s");
     }
 
     public static void addColumn(String table, String col, String colInfo) {
@@ -199,8 +201,40 @@ public class DBUtils {
             excute(sql);
         }
         long endTime = System.currentTimeMillis();
-        System.out.println("Time consumed (add and update MA): " + (endTime - startTime) / 1000.0 + "s");
+        System.out.println("Time consumed (add and update MA" + days + "): " + (endTime - startTime) / 1000.0 + "s");
     }
 
+    public static void addAndUpdateMACD(Stock stock) {
+        long startTime = System.currentTimeMillis();
 
+        addColumn(stock.getTableName(),"macd_ema12","VARCHAR(20)");
+        addColumn(stock.getTableName(),"macd_ema26","VARCHAR(20)");
+        addColumn(stock.getTableName(),"macd_diff","VARCHAR(20)");
+        addColumn(stock.getTableName(),"macd_dea","VARCHAR(20)");
+        addColumn(stock.getTableName(),"macd_bar","VARCHAR(20)");
+
+        List<StockMetaData> lists = StockUtils.getHistory(stock);
+        Map<Date, Macd> map = Calculator.calMacd(lists);
+//        Iterator<Map.Entry<Date,Macd>> iterator = map.entrySet().iterator();
+//        while(iterator.hasNext()){
+//            Map.Entry<Date,Macd> entry = iterator.next();
+//            System.out.println(entry.getKey()+ "    " + entry.getValue());
+//        }
+        for (Map.Entry<Date, Macd> entry : map.entrySet()) {
+
+            String sql = "UPDATE " + stock.getTableName() + " SET " +
+                    Macd.COL_EMA12 + " = " + entry.getValue().getEma12() + ", " +
+                    Macd.COL_EMA26 + " = " + entry.getValue().getEma26() + ", " +
+                    Macd.COL_DIFF + " = " + entry.getValue().getDiff() + ", " +
+                    Macd.COL_DEA + " = " + entry.getValue().getDea() + ", " +
+                    Macd.COL_BAR + " = " + entry.getValue().getBar() +
+                    " WHERE date = '" + entry.getKey() + "';";
+            excute(sql);
+        }
+
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time consumed (add and update MACD of " + stock.getCode() + "): " + (endTime - startTime) / 1000.0 + "s");
+
+    }
 }
