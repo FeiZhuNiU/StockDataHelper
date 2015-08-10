@@ -53,11 +53,7 @@ public class Calculator {
 
             StockMetaData metaData = metaDatas.get(size - 1);
             Macd macd = new Macd();
-            macd.setDiff(0.0000);
-            macd.setDea(0.0000);
-            macd.setBar(0.0000);
-            macd.setEma12(metaData.getAdjust_close());
-            macd.setEma26(metaData.getAdjust_close());
+            macd.setMacd(null,metaData);
             ret.put(metaData.getDate(),macd);
 
             for(int i = 1; i < size ; ++i){
@@ -65,12 +61,12 @@ public class Calculator {
                 Macd yesterday = ret.get(metaDatas.get(size-i).getDate());
 
                 Macd macd_today = new Macd();
-                macd_today.setEma12(cutDecimal(yesterday.getEma12()*11.0/13.0 + metaDataToday.getAdjust_close()*2.0/13.0,4));
-                macd_today.setEma26(cutDecimal(yesterday.getEma26()*25.0/27.0 + metaDataToday.getAdjust_close()*2.0/17.0,4));
-                macd_today.setDiff(cutDecimal(macd_today.getEma12()-macd_today.getEma26(),4));
-                macd_today.setDea(cutDecimal(yesterday.getDea()*8.0/10.0 + macd_today.getDiff()*2.0/10.0,4));
-                macd_today.setBar(cutDecimal(2.0*(macd_today.getDiff()-macd_today.getDea()),4));
-
+//                macd_today.setEma12(cutDecimal(yesterday.getEma12()*11.0/13.0 + metaDataToday.getAdjust_close()*2.0/13.0,4));
+//                macd_today.setEma26(cutDecimal(yesterday.getEma26()*25.0/27.0 + metaDataToday.getAdjust_close()*2.0/17.0,4));
+//                macd_today.setDiff(cutDecimal(macd_today.getEma12()-macd_today.getEma26(),4));
+//                macd_today.setDea(cutDecimal(yesterday.getDea()*8.0/10.0 + macd_today.getDiff()*2.0/10.0,4));
+//                macd_today.setBar(cutDecimal(2.0*(macd_today.getDiff()-macd_today.getDea()),4));
+                macd_today.setMacd(yesterday,metaDataToday);
                 ret.put(metaDataToday.getDate(),macd_today);
             }
         }

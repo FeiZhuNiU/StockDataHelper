@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.*;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -61,10 +60,10 @@ public class DBUtils {
 //    }
 
     /**
-     * Ö´ÐÐÈÎºÎsqlÓï¾ä£¬Ò²¾ÍÊÇÇ°Á½ÕßÖ®Ò»¡£
-     * ·µ»ØÖµÊÇµÚÒ»¸ö½á¹ûµÄ±íÏÖÐÎÊ½¡£
-     * µ±µÚÒ»¸öÖ´ÐÐ½á¹ûÊÇ²éÑ¯Óï¾äÊ±£¬·µ»Øtrue£¬¿ÉÒÔÍ¨¹ýgetResultSet·½·¨»ñÈ¡½á¹û£»
-     * µ±µÚÒ»¸öÖ´ÐÐ½á¹ûÊÇ¸üÐÂÓï¾ä»òDDLÓï¾äÊ±£¬·µ»Øfalse£¬¿ÉÒÔÍ¨¹ýgetUpdateCount·½·¨»ñÈ¡¸üÐÂµÄ¼ÇÂ¼ÊýÁ¿
+     * Ö´ï¿½ï¿½ï¿½Îºï¿½sqlï¿½ï¿½ä£¬Ò²ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ö®Ò»ï¿½ï¿½
+     * ï¿½ï¿½ï¿½ï¿½Öµï¿½Çµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½
+     * ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ö´ï¿½Ð½ï¿½ï¿½ï¿½Ç²ï¿½Ñ¯ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½trueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½getResultSetï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½
+     * ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ö´ï¿½Ð½ï¿½ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DDLï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½falseï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½getUpdateCountï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ÂµÄ¼ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
      */
     public static boolean excute(String sql) {
         boolean ret;
@@ -158,7 +157,18 @@ public class DBUtils {
         createTable(TABLE_BIG, "code INT", "date DATE", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volume VARCHAR(20)", "adjust_close VARCHAR(20)");
     }
 
-    public static void insertIntoDB(Stock stock) {
+    public static void addColumn(String table, String col, String colInfo) {
+        dropColumn(table, col);
+        String sql = "ALTER TABLE " + table + " ADD " + col + " " + colInfo;
+        excute(sql);
+    }
+
+    public static void dropColumn(String table, String col) {
+        String sql = "ALTER TABLE " + table + " DROP COLUMN " + col;
+        excute(sql);
+    }
+
+    public static void insertStockDataToDB(Stock stock) {
 
         long startTime = System.currentTimeMillis();
 
@@ -173,18 +183,6 @@ public class DBUtils {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Time consumed (insert data into db from " + stock.getCode() + ".scv): " + (endTime - startTime) / 1000.0 + "s");
-    }
-
-    public static void addColumn(String table, String col, String colInfo) {
-        dropColumn(table, col);
-        String sql = "ALTER TABLE " + table + " ADD " + col + " " + colInfo;
-        excute(sql);
-        //SQL: update table xx set colInfo = value where code = and date = ;
-    }
-
-    public static void dropColumn(String table, String col) {
-        String sql = "ALTER TABLE " + table + " DROP COLUMN " + col;
-        excute(sql);
     }
 
     public static void addAndUpdateMA(Stock stock, int days, String col, String colInfo) {
@@ -207,19 +205,15 @@ public class DBUtils {
     public static void addAndUpdateMACD(Stock stock) {
         long startTime = System.currentTimeMillis();
 
-        addColumn(stock.getTableName(),"macd_ema12","VARCHAR(20)");
-        addColumn(stock.getTableName(),"macd_ema26","VARCHAR(20)");
-        addColumn(stock.getTableName(),"macd_diff","VARCHAR(20)");
-        addColumn(stock.getTableName(),"macd_dea","VARCHAR(20)");
-        addColumn(stock.getTableName(),"macd_bar","VARCHAR(20)");
+        addColumn(stock.getTableName(),Macd.COL_EMA12,"VARCHAR(20)");
+        addColumn(stock.getTableName(),Macd.COL_EMA26,"VARCHAR(20)");
+        addColumn(stock.getTableName(),Macd.COL_DIFF,"VARCHAR(20)");
+        addColumn(stock.getTableName(),Macd.COL_DEA,"VARCHAR(20)");
+        addColumn(stock.getTableName(),Macd.COL_BAR,"VARCHAR(20)");
 
         List<StockMetaData> lists = StockUtils.getHistory(stock);
         Map<Date, Macd> map = Calculator.calMacd(lists);
-//        Iterator<Map.Entry<Date,Macd>> iterator = map.entrySet().iterator();
-//        while(iterator.hasNext()){
-//            Map.Entry<Date,Macd> entry = iterator.next();
-//            System.out.println(entry.getKey()+ "    " + entry.getValue());
-//        }
+
         for (Map.Entry<Date, Macd> entry : map.entrySet()) {
 
             String sql = "UPDATE " + stock.getTableName() + " SET " +

@@ -11,8 +11,6 @@ import com.nb.db.DBUtils;
 import com.nb.internet.NetUtils;
 import com.nb.stock.Stock;
 
-import java.sql.Date;
-
 public class StockHelper {
 
     public static void main(String[] args) {
@@ -43,7 +41,7 @@ public class StockHelper {
     private static void downloadDataToDB(Stock stock) {
 
         if (NetUtils.downloadData(stock.getCode())) {
-            DBUtils.insertIntoDB(stock);
+            DBUtils.insertStockDataToDB(stock);
 
         } else {
             System.out.println("no such stock");
