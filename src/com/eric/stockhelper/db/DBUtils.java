@@ -1,4 +1,4 @@
-package com.nb.db;
+package com.eric.stockhelper.db;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -8,16 +8,16 @@ package com.nb.db;
  +===========================================================================*/
 
 
-import com.nb.db.table.BasicStockTable;
-import com.nb.db.table.ColInfo;
-import com.nb.db.table.MarketTable;
-import com.nb.db.table.Table;
-import com.nb.stock.index.Calculator;
-import com.nb.internet.NetUtils;
-import com.nb.stock.Stock;
-import com.nb.stock.StockMetaData;
-import com.nb.stock.StockUtils;
-import com.nb.stock.index.Macd;
+import com.eric.stockhelper.db.table.BasicStockTable;
+import com.eric.stockhelper.db.table.ColInfo;
+import com.eric.stockhelper.db.table.MarketTable;
+import com.eric.stockhelper.db.table.Table;
+import com.eric.stockhelper.internet.NetUtils;
+import com.eric.stockhelper.stock.Stock;
+import com.eric.stockhelper.stock.StockUtils;
+import com.eric.stockhelper.stock.index.Calculator;
+import com.eric.stockhelper.stock.index.Macd;
+import com.eric.stockhelper.stock.StockMetaData;
 
 import java.io.BufferedReader;
 import java.io.File;

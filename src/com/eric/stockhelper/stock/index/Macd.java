@@ -1,4 +1,4 @@
-package com.nb.stock.index;
+package com.eric.stockhelper.stock.index;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,7 +7,7 @@ package com.nb.stock.index;
  |           Created by lliyu on 8/7/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import com.nb.stock.StockMetaData;
+import com.eric.stockhelper.stock.StockMetaData;
 
 public class Macd {
 

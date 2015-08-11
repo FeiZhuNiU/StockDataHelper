@@ -1,4 +1,4 @@
-package com.nb.db.table;
+package com.eric.stockhelper.db.table;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -9,19 +9,10 @@ package com.nb.db.table;
 
 import java.util.List;
 
-public abstract class AbstractTable implements Table{
+public interface Table {
 
-    protected String tableName;
+    List<ColInfo> getColInfos();
 
-    protected List<ColInfo> colInfos;
+    String getTableName();
 
-    @Override
-    public List<ColInfo> getColInfos() {
-        return colInfos;
-    }
-
-    @Override
-    public String getTableName() {
-        return tableName;
-    }
 }

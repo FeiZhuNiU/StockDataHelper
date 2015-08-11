@@ -1,4 +1,4 @@
-package com.nb.stock.index;
+package com.eric.stockhelper.stock.index;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,14 +7,14 @@ package com.nb.stock.index;
  |           Created by lliyu on 8/11/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import com.nb.stock.StockMetaData;
+import com.eric.stockhelper.stock.StockMetaData;
 
 import java.util.List;
 
 public class Ma {
 
     private int days;
-    private double ma;
+    private double maValue;
 
     public Ma(int days) {
         this.days = days;
@@ -22,13 +22,29 @@ public class Ma {
 
     public void setMA(List<StockMetaData> list) {
         if (list == null || list.size() != days) {
-            System.out.println("wrong days");
+            System.out.println("history data provided for calculating MA is not correct!");
+            return;
         }
         double sum = 0.0;
         for (int i = 0; i < days; ++i) {
             sum += list.get(i).getAdjust_close();
         }
-        ma = sum /= days;
+        maValue = Calculator.cutDecimal(sum / days, 3);
     }
 
+    public double getMaValue() {
+        return maValue;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    @Override
+    public String toString() {
+        return "Ma{" +
+                "days=" + days +
+                ", maValue=" + maValue +
+                '}';
+    }
 }

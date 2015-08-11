@@ -1,4 +1,4 @@
-package com.nb.db.table;
+package com.eric.stockhelper.db.table;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,12 +7,23 @@ package com.nb.db.table;
  |           Created by lliyu on 8/11/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
+import com.eric.stockhelper.db.DBConstants;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public interface Table {
+public class MarketTable extends AbstractTable{
 
-    List<ColInfo> getColInfos();
+    public static final List<ColInfo> originCols = new ArrayList<>();
 
-    String getTableName();
+    static {
+        originCols.add(new ColInfo("stock_code","INT"));
+        originCols.add(new ColInfo("stock_name","VARCHAR(20)"));
+    }
+
+    public MarketTable() {
+        this.tableName = DBConstants.TABLE_MARKET_NAME;
+        colInfos = new ArrayList<>(originCols);
+    }
 
 }

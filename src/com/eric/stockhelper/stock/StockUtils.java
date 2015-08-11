@@ -1,4 +1,4 @@
-package com.nb.stock;
+package com.eric.stockhelper.stock;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,7 +7,7 @@ package com.nb.stock;
  |           Created by lliyu on 8/5/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import com.nb.db.DBUtils;
+import com.eric.stockhelper.db.DBUtils;
 
 import java.sql.Date;
 import java.sql.ResultSet;

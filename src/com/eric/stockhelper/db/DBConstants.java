@@ -1,4 +1,4 @@
-package com.nb.db;
+package com.eric.stockhelper.db;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |

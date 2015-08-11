@@ -1,4 +1,4 @@
-package com.nb.stock.index;
+package com.eric.stockhelper.stock.index;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,9 +7,10 @@ package com.nb.stock.index;
  |           Created by lliyu on 8/6/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import com.nb.stock.StockMetaData;
+import com.eric.stockhelper.stock.StockMetaData;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,26 +22,30 @@ public class Calculator {
         Map<Date, Double> ret = new HashMap<>();
 
         if (metaDatas != null && metaDatas.size() >= days) {
-            double sum = 0;
-            for (int i = 0; i < days; ++i) {
-                sum += metaDatas.get(i).getAdjust_close();
-            }
-            for (int i = 0; i <= metaDatas.size() - days; ++i) {
-
-                StockMetaData metaData = metaDatas.get(i);
-                double ma = sum / (double) days;
-                ret.put(metaData.getDate(), cutDecimal(ma, 3));
-                sum -= metaData.getAdjust_close();
-                if (i + days < metaDatas.size())
-                    sum += metaDatas.get(i + days).getAdjust_close();
-            }
-//            for(int i = 0 ; i <=metaDatas.size()-days;++i){
-//                double sum = 0;
-//                for(int j = 0 ; j < days; ++j){
-//                    sum += metaDatas.get(i+j).getAdjust_close();
-//                }
-//                ret.put(metaDatas.get(i).getDate(),sum/(double)days);
+//            double sum = 0;
+//            for (int i = 0; i < days; ++i) {
+//                sum += metaDatas.get(i).getAdjust_close();
 //            }
+//            for (int i = 0; i <= metaDatas.size() - days; ++i) {
+//
+//                StockMetaData metaData = metaDatas.get(i);
+//                double ma = sum / (double) days;
+//                ret.put(metaData.getDate(), cutDecimal(ma, 3));
+//                sum -= metaData.getAdjust_close();
+//                if (i + days < metaDatas.size())
+//                    sum += metaDatas.get(i + days).getAdjust_close();
+//            }
+            for(int i = 0 ; i <=metaDatas.size()-days;++i){
+
+                Ma ma = new Ma(days);
+                List<StockMetaData> metaDataList = new ArrayList<>();
+                for(int j = 0 ; j < days; ++j){
+                    metaDataList.add(metaDatas.get(i+j));
+                }
+                ma.setMA(metaDataList);
+
+                ret.put(metaDatas.get(i).getDate(),ma.getMaValue());
+            }
 
         }
         return ret;
@@ -61,11 +66,6 @@ public class Calculator {
                 Macd yesterday = ret.get(metaDatas.get(size - i).getDate());
 
                 Macd macd_today = new Macd();
-//                macd_today.setEma12(cutDecimal(yesterday.getEma12()*11.0/13.0 + metaDataToday.getAdjust_close()*2.0/13.0,4));
-//                macd_today.setEma26(cutDecimal(yesterday.getEma26()*25.0/27.0 + metaDataToday.getAdjust_close()*2.0/17.0,4));
-//                macd_today.setDiff(cutDecimal(macd_today.getEma12()-macd_today.getEma26(),4));
-//                macd_today.setDea(cutDecimal(yesterday.getDea()*8.0/10.0 + macd_today.getDiff()*2.0/10.0,4));
-//                macd_today.setBar(cutDecimal(2.0*(macd_today.getDiff()-macd_today.getDea()),4));
                 macd_today.setMacd(yesterday, metaDataToday);
                 ret.put(metaDataToday.getDate(), macd_today);
             }
