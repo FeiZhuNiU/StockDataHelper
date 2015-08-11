@@ -24,7 +24,7 @@ public class StockHelper {
 
             Stock stock = new Stock(stockCode);
             downloadDataToDB(stock);
-            DBUtils.addAndUpdateMACD(stock);
+//            DBUtils.addAndUpdateMACD(stock);
 
 //            DBUtils.addAndUpdateMA(stock, 5, "ma5", "VARCHAR(20)");
 //            DBUtils.addAndUpdateMA(stock, 10, "ma10", "VARCHAR(20)");
@@ -41,7 +41,7 @@ public class StockHelper {
     private static void downloadDataToDB(Stock stock) {
 
         if (NetUtils.downloadData(stock.getCode())) {
-            DBUtils.insertStockDataToDB(stock);
+            DBUtils.downloadStockDataToDB(stock);
 
         } else {
             System.out.println("no such stock");

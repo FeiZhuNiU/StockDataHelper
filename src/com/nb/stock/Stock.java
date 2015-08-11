@@ -7,7 +7,7 @@ package com.nb.stock;
  |           Created by lliyu on 8/5/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import com.nb.db.DBUtils;
+import com.nb.db.DBConstants;
 
 public class Stock {
     private String name;
@@ -18,7 +18,7 @@ public class Stock {
 
     public Stock(int code) {
         this.code = code;
-        table_name = DBUtils.TABLE_SH_PRE + code;
+        table_name = DBConstants.TABLE_SH_PRE + code;
     }
 
     public String getName() {

@@ -8,6 +8,9 @@ package com.nb.db;
  +===========================================================================*/
 
 
+import com.nb.db.table.BasicStockTable;
+import com.nb.db.table.MarketTable;
+import com.nb.db.table.Table;
 import com.nb.stock.index.Calculator;
 import com.nb.internet.NetUtils;
 import com.nb.stock.Stock;
@@ -21,12 +24,9 @@ import java.io.FileReader;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class DBUtils {
-    public static String dbUrl = "jdbc:mysql://localhost:3306/stockdb?user=lliyu&password=2222";
-    public final static String TABLE_MARKET = "market";
-    public final static String TABLE_SH_PRE = "sh";
-    public final static String TABLE_BIG = "big_table";
 
 
     private static Connection connection = null;
@@ -39,7 +39,7 @@ public class DBUtils {
     public static boolean connectDB() {
         boolean ret = true;
         try {
-            connection = DriverManager.getConnection(dbUrl);
+            connection = DriverManager.getConnection(DBConstants.DB_URL);
             statement = connection.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,15 +90,22 @@ public class DBUtils {
         return ret;
     }
 
-    public static boolean createTable(String table, String... colInfos) {
-        dropTable(table);
-        String sql = "CREATE TABLE " + table + " (";
-        int size = colInfos.length;
-        for (int i = 0; i < size; ++i) {
-            sql += colInfos[i];
-            if (i != size - 1)
-                sql += ",";
+    public static boolean createTable(Table table) {
+        dropTable(table.getTableName());
+        String sql = "CREATE TABLE " + table.getTableName() + " (";
+
+        Set<Map.Entry<String,String>> entrySet = table.getColInfo().entrySet();
+        for (Map.Entry<String, String> entry : entrySet) {
+            sql += (entry.getKey() + " " + entry.getValue() + ",");
         }
+        sql = sql.substring(0,sql.length()-1);
+
+//        for (int i = 0; i < size; ++i) {
+//            sql +=
+//            if (i != size - 1)
+//                sql += ",";
+//        }
+
         sql += ");";
         return excute(sql);
     }
@@ -108,9 +115,9 @@ public class DBUtils {
         return excute(sql);
     }
 
-    public static void importDataFromCsv(int stockCode, String tableName) {
+    public static void importDataFromCsv(Stock stock) {
 
-        String fileName = NetUtils.savePath_pre + stockCode + NetUtils.savePath_post;
+        String fileName = NetUtils.savePath_pre + stock.getCode() + NetUtils.savePath_post;
 
         File csvFile = new File(fileName);
 
@@ -122,7 +129,7 @@ public class DBUtils {
                 String[] datas = line.split(",");
                 if (datas.length != 7)
                     continue;
-                String sql = "INSERT INTO " + tableName + " VALUES (";
+                String sql = "INSERT INTO " + stock.getTableName() + " VALUES (";
                 for (int i = 0; i < 7; ++i) {
                     sql += ("'" + datas[i] + "'");
                     if (i != 6)
@@ -153,8 +160,9 @@ public class DBUtils {
      * big_table
      */
     public static void resetTables() {
-        createTable(TABLE_MARKET, "code INT", "name VARCHAR(20)");
-        createTable(TABLE_BIG, "code INT", "date DATE", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volume VARCHAR(20)", "adjust_close VARCHAR(20)");
+        createTable(new MarketTable());
+//        createTable(DBConstants.TABLE_BIG, "code INT", "date DATE", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volume VARCHAR(20)", "adjust_close VARCHAR(20)");
+
     }
 
     public static void addColumn(String table, String col, String colInfo) {
@@ -168,17 +176,17 @@ public class DBUtils {
         excute(sql);
     }
 
-    public static void insertStockDataToDB(Stock stock) {
+    public static void downloadStockDataToDB(Stock stock) {
 
         long startTime = System.currentTimeMillis();
 
-        excute("INSERT INTO " + DBUtils.TABLE_MARKET + " (code) VALUES (" + stock.getCode() + ");");
+        excute("INSERT INTO " + DBConstants.TABLE_MARKET_NAME + " (stock_code) VALUES (" + stock.getCode() + ");");
 
-        String tableName = TABLE_SH_PRE + String.valueOf(stock.getCode());
+//        String tableName = DBConstants.TABLE_SH_PRE + String.valueOf(stock.getCode());
 
-        createTable(tableName, "date DATE", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volumn VARCHAR(20)", "adjust_close VARCHAR(20)");
-
-        importDataFromCsv(stock.getCode(), tableName);
+//        createTable(stock.getTableName(), "date DATE", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volume VARCHAR(20)", "adjust_close VARCHAR(20)");
+        createTable(new BasicStockTable(stock));
+        importDataFromCsv(stock);
 
         long endTime = System.currentTimeMillis();
 
@@ -205,11 +213,11 @@ public class DBUtils {
     public static void addAndUpdateMACD(Stock stock) {
         long startTime = System.currentTimeMillis();
 
-        addColumn(stock.getTableName(),Macd.COL_EMA12,"VARCHAR(20)");
-        addColumn(stock.getTableName(),Macd.COL_EMA26,"VARCHAR(20)");
-        addColumn(stock.getTableName(),Macd.COL_DIFF,"VARCHAR(20)");
-        addColumn(stock.getTableName(),Macd.COL_DEA,"VARCHAR(20)");
-        addColumn(stock.getTableName(),Macd.COL_BAR,"VARCHAR(20)");
+        addColumn(stock.getTableName(), DBConstants.MACD_COL_EMA12, DBConstants.MACD_COL_EMA12_TYPE);
+        addColumn(stock.getTableName(), DBConstants.MACD_COL_EMA26, DBConstants.MACD_COL_EMA26_TYPE);
+        addColumn(stock.getTableName(), DBConstants.MACD_COL_DIFF, DBConstants.MACD_COL_DIFF_TYPE);
+        addColumn(stock.getTableName(), DBConstants.MACD_COL_DEA, DBConstants.MACD_COL_DEA_TYPE);
+        addColumn(stock.getTableName(), DBConstants.MACD_COL_BAR, DBConstants.MACD_COL_BAR_TYPE);
 
         List<StockMetaData> lists = StockUtils.getHistory(stock);
         Map<Date, Macd> map = Calculator.calMacd(lists);
@@ -217,11 +225,11 @@ public class DBUtils {
         for (Map.Entry<Date, Macd> entry : map.entrySet()) {
 
             String sql = "UPDATE " + stock.getTableName() + " SET " +
-                    Macd.COL_EMA12 + " = " + entry.getValue().getEma12() + ", " +
-                    Macd.COL_EMA26 + " = " + entry.getValue().getEma26() + ", " +
-                    Macd.COL_DIFF + " = " + entry.getValue().getDiff() + ", " +
-                    Macd.COL_DEA + " = " + entry.getValue().getDea() + ", " +
-                    Macd.COL_BAR + " = " + entry.getValue().getBar() +
+                    DBConstants.MACD_COL_EMA12 + " = " + entry.getValue().getEma12() + ", " +
+                    DBConstants.MACD_COL_EMA26 + " = " + entry.getValue().getEma26() + ", " +
+                    DBConstants.MACD_COL_DIFF + " = " + entry.getValue().getDiff() + ", " +
+                    DBConstants.MACD_COL_DEA + " = " + entry.getValue().getDea() + ", " +
+                    DBConstants.MACD_COL_BAR + " = " + entry.getValue().getBar() +
                     " WHERE date = '" + entry.getKey() + "';";
             excute(sql);
         }

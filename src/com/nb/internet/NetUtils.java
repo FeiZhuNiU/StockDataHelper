@@ -17,16 +17,15 @@ import java.net.URL;
 
 public class NetUtils {
 
-    private static String url_pre = "http://table.finance.yahoo.com/table.csv?s=";
-    private static String url_post = ".ss";
+    private static final String url_pre = "http://table.finance.yahoo.com/table.csv?s=";
+    private static final String url_post = ".ss";
 
-    public static String savePath_pre = "d:/stock/";
-    public static String savePath_post = ".csv";
+    public static final String savePath_pre = "d:/stock/";
+    public static final String savePath_post = ".csv";
 
 
     /**
      * @param code    the stock code
-     * @param saveDir include file name
      * @return false if failed to download data
      */
     public static boolean downloadData(int code) {
