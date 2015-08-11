@@ -7,17 +7,11 @@ package com.nb.db.table;
  |           Created by lliyu on 8/11/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import java.util.Map;
 
-public class BigTable extends AbstractTable implements Table {
+import java.util.List;
 
-    @Override
-    public Map<String, String> getColInfo() {
-        return null;
-    }
+public class BigTable extends AbstractTable{
+    public static List<ColInfo> originCols;
 
-    @Override
-    public String getTableName() {
-        return null;
-    }
+
 }

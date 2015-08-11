@@ -9,6 +9,7 @@ package com.nb.db;
 
 
 import com.nb.db.table.BasicStockTable;
+import com.nb.db.table.ColInfo;
 import com.nb.db.table.MarketTable;
 import com.nb.db.table.Table;
 import com.nb.stock.index.Calculator;
@@ -94,11 +95,11 @@ public class DBUtils {
         dropTable(table.getTableName());
         String sql = "CREATE TABLE " + table.getTableName() + " (";
 
-        Set<Map.Entry<String,String>> entrySet = table.getColInfo().entrySet();
-        for (Map.Entry<String, String> entry : entrySet) {
-            sql += (entry.getKey() + " " + entry.getValue() + ",");
+        List<ColInfo> colInfos = table.getColInfos();
+        for (ColInfo colInfo : colInfos) {
+            sql += (colInfo.getColName() + " " + colInfo.getColType() + ",");
         }
-        sql = sql.substring(0,sql.length()-1);
+        sql = sql.substring(0, sql.length() - 1);
 
 //        for (int i = 0; i < size; ++i) {
 //            sql +=
@@ -110,9 +111,28 @@ public class DBUtils {
         return excute(sql);
     }
 
-    public static boolean dropTable(String table) {
+    private static boolean dropTable(String table) {
         String sql = "DROP TABLE " + table + ";";
         return excute(sql);
+    }
+
+    public static boolean insertData(String table, Map<String, String> dataMap) {
+        if (dataMap != null && dataMap.size() != 0) {
+            Set<Map.Entry<String, String>> entries = dataMap.entrySet();
+            String sql = "INSERT INTO " + table + " (";
+            for (Map.Entry<String, String> entry : entries) {
+                sql += (entry.getKey() + ",");
+            }
+            sql = sql.substring(0, sql.length() - 1);
+            sql += ") VALUES (";
+            for (Map.Entry<String, String> entry : entries) {
+                sql += (entry.getValue() + ",");
+            }
+            sql += ");";
+
+            return excute(sql);
+        }
+        return false;
     }
 
     public static void importDataFromCsv(Stock stock) {
@@ -136,7 +156,7 @@ public class DBUtils {
                         sql += ",";
                 }
                 sql += ");";
-                DBUtils.excute(sql);
+                excute(sql);
 
 //                sql = "INSERT INTO " + TABLE_BIG + " VALUES (" + stockCode + ",";
 //                for (int i = 0; i < 7; ++i) {

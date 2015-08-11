@@ -9,17 +9,24 @@ package com.nb.db.table;
 
 import com.nb.db.DBConstants;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MarketTable extends AbstractTable{
 
+    public static final List<ColInfo> originCols;
+
+    static {
+        originCols = new ArrayList<>();
+        originCols.add(new ColInfo("stock_code","INT"));
+        originCols.add(new ColInfo("stock_name","VARCHAR(20)"));
+    }
+
     public MarketTable() {
+
         this.tableName = DBConstants.TABLE_MARKET_NAME;
-        if(colInfo == null){
-            colInfo = new LinkedHashMap<>();
-        }
-        colInfo.put("stock_code","INT");
-        colInfo.put("stock_name","VARCHAR(20)");
+        colInfos = new ArrayList<>(originCols);
+
     }
 
 }

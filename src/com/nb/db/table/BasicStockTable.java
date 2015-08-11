@@ -9,25 +9,35 @@ package com.nb.db.table;
 
 import com.nb.stock.Stock;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BasicStockTable extends AbstractTable{
 
-    protected Stock stock;
+    public static final List<ColInfo> originCols;
 
-    public BasicStockTable(Stock stock) {
-        this.tableName = stock.getTableName();
-        this.stock = stock;
-        if(colInfo==null){
-            colInfo = new LinkedHashMap<>();
-        }
-        colInfo.put("date","DATE");
-        colInfo.put("open","VARCHAR(20)");
-        colInfo.put("high","VARCHAR(20)");
-        colInfo.put("low","VARCHAR(20)");
-        colInfo.put("close","VARCHAR(20)");
-        colInfo.put("volume","VARCHAR(20)");
-        colInfo.put("adjust_close","VARCHAR(20)");
+    static {
+        originCols = new ArrayList<>();
+        originCols.add(new ColInfo("date", "DATE"));
+        originCols.add(new ColInfo("open", "VARCHAR(20)"));
+        originCols.add(new ColInfo("high", "VARCHAR(20)"));
+        originCols.add(new ColInfo("low", "VARCHAR(20)"));
+        originCols.add(new ColInfo("close", "VARCHAR(20)"));
+        originCols.add(new ColInfo("volume", "VARCHAR(20)"));
+        originCols.add(new ColInfo("adjust_close", "VARCHAR(20)"));
     }
 
+    private Stock stock;
+
+    public BasicStockTable(Stock stock) {
+
+        this.tableName = stock.getTableName();
+        this.stock = stock;
+
+        colInfos = new ArrayList<>(originCols);
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
 }

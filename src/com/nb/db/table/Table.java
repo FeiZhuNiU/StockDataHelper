@@ -7,11 +7,11 @@ package com.nb.db.table;
  |           Created by lliyu on 8/11/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import java.util.Map;
+import java.util.List;
 
 public interface Table {
 
-    Map<String,String> getColInfo();
+    List<ColInfo> getColInfos();
 
     String getTableName();
 

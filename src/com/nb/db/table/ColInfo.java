@@ -7,21 +7,25 @@ package com.nb.db.table;
  |           Created by lliyu on 8/11/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import java.util.List;
+public class ColInfo {
 
-public abstract class AbstractTable implements Table{
+    private String col_name;
+    private String col_type;
 
-    protected String tableName;
-
-    protected List<ColInfo> colInfos;
-
-    @Override
-    public List<ColInfo> getColInfos() {
-        return colInfos;
+    public ColInfo(String col_name, String col_type) {
+        this.col_name = col_name;
+        this.col_type = col_type;
     }
 
-    @Override
-    public String getTableName() {
-        return tableName;
+//    public Map.Entry<String,String> getColEntry(){
+//        return new AbstractMap.SimpleEntry<String, String>(col_name,col_type);
+//    }
+
+    public String getColName() {
+        return col_name;
+    }
+
+    public String getColType() {
+        return col_type;
     }
 }
