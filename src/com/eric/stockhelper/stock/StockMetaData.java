@@ -20,8 +20,6 @@ public class StockMetaData {
     private double adjust_close;
 
 
-    private double m5;
-
     public StockMetaData(Stock stock, Date date, double high, double low, double open, double close, long volume, double adjust_close) {
         this.stock = stock;
         this.date = date;
@@ -65,13 +63,6 @@ public class StockMetaData {
         return date;
     }
 
-    public double getM5() {
-        return m5;
-    }
-
-    public void setM5(double m5) {
-        this.m5 = m5;
-    }
 
     @Override
     public String toString() {
@@ -84,7 +75,6 @@ public class StockMetaData {
                 ", close=" + close +
                 ", volume=" + volume +
                 ", adjust_close=" + adjust_close +
-                ", m5=" + m5 +
                 '}';
     }
 }

@@ -23,7 +23,7 @@ public class StockHelper {
             System.out.println("Process stock: " + stockCode);
 
             Stock stock = new Stock(stockCode);
-//            downloadDataToDB(stock);
+            downloadDataToDB(stock);
 
 
 //            DBUtils.addAndUpdateMA(stock, 5, "ma5", "VARCHAR(20)");
@@ -31,7 +31,7 @@ public class StockHelper {
 //            DBUtils.addAndUpdateMA(stock, 20, "ma20", "VARCHAR(20)");
 //            DBUtils.addAndUpdateMA(stock, 60, "ma60", "VARCHAR(20)");
 //            DBUtils.addAndUpdateMA(stock, 120, "ma120", "VARCHAR(20)");
-            DBUtils.addAndUpdateMACD(stock);
+//            DBUtils.addAndUpdateMACD(stock);
         }
 
         DBUtils.disConnectDB();
@@ -41,7 +41,7 @@ public class StockHelper {
     private static void downloadDataToDB(Stock stock) {
 
         if (NetUtils.downloadData(stock.getCode())) {
-            DBUtils.downloadStockDataToDB(stock);
+            DBUtils.importStockDataToDB(stock);
 
         } else {
             System.out.println("no such stock");

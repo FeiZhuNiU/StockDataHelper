@@ -8,10 +8,7 @@ package com.eric.stockhelper.db;
  +===========================================================================*/
 
 
-import com.eric.stockhelper.db.table.BasicStockTable;
-import com.eric.stockhelper.db.table.ColInfo;
-import com.eric.stockhelper.db.table.MarketTable;
-import com.eric.stockhelper.db.table.Table;
+import com.eric.stockhelper.db.table.*;
 import com.eric.stockhelper.internet.NetUtils;
 import com.eric.stockhelper.stock.Stock;
 import com.eric.stockhelper.stock.StockUtils;
@@ -158,7 +155,7 @@ public class DBUtils {
                 sql += ");";
                 excute(sql);
 
-//                sql = "INSERT INTO " + TABLE_BIG + " VALUES (" + stockCode + ",";
+//                sql = "INSERT INTO " + TABLE_BIG_NAME + " VALUES (" + stockCode + ",";
 //                for (int i = 0; i < 7; ++i) {
 //                    sql += ("'" + datas[i] + "'");
 //                    if (i != 6)
@@ -180,8 +177,9 @@ public class DBUtils {
      * big_table
      */
     public static void resetTables() {
-        createTable(new MarketTable());
-//        createTable(DBConstants.TABLE_BIG, "code INT", "date DATE", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volume VARCHAR(20)", "adjust_close VARCHAR(20)");
+        createTable(new MarketTable(DBConstants.TABLE_MARKET_NAME));
+        createTable(new BigTable(DBConstants.TABLE_BIG_NAME));
+//        createTable(DBConstants.TABLE_BIG_NAME, "code INT", "date DATE", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volume VARCHAR(20)", "adjust_close VARCHAR(20)");
 
     }
 
@@ -196,7 +194,7 @@ public class DBUtils {
         excute(sql);
     }
 
-    public static void downloadStockDataToDB(Stock stock) {
+    public static void importStockDataToDB(Stock stock) {
 
         long startTime = System.currentTimeMillis();
 

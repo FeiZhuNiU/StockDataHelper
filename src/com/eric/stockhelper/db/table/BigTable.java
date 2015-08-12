@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BigTable extends AbstractTable{
-    public static List<ColInfo> originCols = new ArrayList<>();
-    //        createTable(DBConstants.TABLE_BIG, "code INT", "date DATE", "open VARCHAR(20)", "high VARCHAR(20)", "low VARCHAR(20)", "close VARCHAR(20)", "volume VARCHAR(20)", "adjust_close VARCHAR(20)");
 
+    public static List<ColInfo> originCols = new ArrayList<>();
 
     static {
         originCols.add(new ColInfo("code","INT"));
@@ -25,5 +24,6 @@ public class BigTable extends AbstractTable{
 
     public BigTable(String table_name) {
         tableName = table_name;
+        colInfos = new ArrayList<>(originCols);
     }
 }

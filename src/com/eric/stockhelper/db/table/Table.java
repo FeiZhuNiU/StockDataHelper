@@ -15,4 +15,8 @@ public interface Table {
 
     String getTableName();
 
+    void addCol(ColInfo colInfo);
+
+    void deleteCol(ColInfo colInfo);
+
 }

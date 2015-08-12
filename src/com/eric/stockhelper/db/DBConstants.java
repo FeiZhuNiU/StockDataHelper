@@ -13,7 +13,7 @@ public class DBConstants {
     public final static String DB_URL = "jdbc:mysql://localhost:3306/stockdb?user=lliyu&password=2222";
     public final static String TABLE_MARKET_NAME = "market";
     public final static String TABLE_SH_PRE = "sh";
-    public final static String TABLE_BIG = "big_table";
+    public final static String TABLE_BIG_NAME = "big_table";
 
     public static final String MACD_COL_EMA12 = "macd_ema12";
     public static final String MACD_COL_EMA26 = "macd_ema26";

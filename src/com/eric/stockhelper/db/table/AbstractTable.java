@@ -25,4 +25,15 @@ public abstract class AbstractTable implements Table{
         return tableName;
     }
 
+    @Override
+    public void addCol(ColInfo colInfo) {
+        if(colInfo!=null)
+            colInfos.add(colInfo);
+    }
+
+    @Override
+    public void deleteCol(ColInfo colInfo) {
+        if(colInfos.contains(colInfo))
+            colInfos.remove(colInfo);
+    }
 }

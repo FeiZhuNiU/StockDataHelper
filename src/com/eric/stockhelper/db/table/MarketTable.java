@@ -21,8 +21,8 @@ public class MarketTable extends AbstractTable{
         originCols.add(new ColInfo("stock_name","VARCHAR(20)"));
     }
 
-    public MarketTable() {
-        this.tableName = DBConstants.TABLE_MARKET_NAME;
+    public MarketTable(String tableName) {
+        this.tableName = tableName;
         colInfos = new ArrayList<>(originCols);
     }
 
