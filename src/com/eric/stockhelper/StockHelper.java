@@ -25,11 +25,11 @@ public class StockHelper {
             System.out.println("Process stock: " + stockCode);
 
             Stock stock = new Stock(stockCode);
-//            DBUtils.downloadDataToDB(stock);
-//            Ma ma = new Ma(stock,null,5);
-//            DBUtils.addAndUpdateIndex(ma,stock);
+            DBUtils.downloadDataToDB(stock);
+            Ma ma = new Ma(stock,null,5);
+            DBUtils.addAndUpdateIndex(ma);
             Macd macd = new Macd(stock,null);
-            DBUtils.addAndUpdateIndex(macd,stock);
+            DBUtils.addAndUpdateIndex(macd);
 
         }
 

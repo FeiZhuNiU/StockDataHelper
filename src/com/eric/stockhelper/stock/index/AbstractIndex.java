@@ -25,12 +25,13 @@ public abstract class AbstractIndex{
 
     /**
      * set ColInfos related to the concrete index
+     * must be called in constructor of child classes
      */
     abstract void setDBColInfo();
 
     /**
      * @return get all index values
-     * the key of map is the col name in db
+     * the key of map is the col name in related table
      */
     public abstract Map<String,Double> getIndexValues();
 

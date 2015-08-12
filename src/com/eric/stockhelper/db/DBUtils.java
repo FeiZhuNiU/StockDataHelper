@@ -238,67 +238,19 @@ public class DBUtils {
         return ret;
     }
 
-//    public static void addAndUpdateMA(Stock stock, int days, ColInfo colInfo) {
-//
-//        long startTime = System.currentTimeMillis();
-//        addColumn(stock.getTableName(), colInfo);
-//
-//        List<StockMetaData> lists = StockUtils.getHistory(stock);
-//        Map<Date, Ma> maMap = Calculator.calMA(lists, days);
-//
-//        for (Map.Entry<Date, Ma> entry : maMap.entrySet()) {
-//
-//            String sql = "UPDATE " + stock.getTableName() + " SET " + colInfo.getColName() + " = " + entry.getValue().getMaValue() + " WHERE date = '" + entry.getKey() + "';";
-//            excute(sql);
-//        }
-//        long endTime = System.currentTimeMillis();
-//        System.out.println("Time consumed (add and update MA" + days + "): " + (endTime - startTime) / 1000.0 + "s");
-//    }
-//
-//    public static void addAndUpdateMACD(Stock stock) {
-//
-//        long startTime = System.currentTimeMillis();
-//
-//        addColumn(stock.getTableName(), new ColInfo(DBConstants.MACD_COL_EMA12, DBConstants.MACD_COL_EMA12_TYPE));
-//        addColumn(stock.getTableName(), new ColInfo(DBConstants.MACD_COL_EMA26, DBConstants.MACD_COL_EMA26_TYPE));
-//        addColumn(stock.getTableName(), new ColInfo(DBConstants.MACD_COL_DIFF, DBConstants.MACD_COL_DIFF_TYPE));
-//        addColumn(stock.getTableName(), new ColInfo(DBConstants.MACD_COL_DEA, DBConstants.MACD_COL_DEA_TYPE));
-//        addColumn(stock.getTableName(), new ColInfo(DBConstants.MACD_COL_BAR, DBConstants.MACD_COL_BAR_TYPE));
-//
-//        List<StockMetaData> lists = StockUtils.getHistory(stock);
-//        Map<Date, Macd> map = Calculator.calMacd(lists);
-//
-//        for (Map.Entry<Date, Macd> entry : map.entrySet()) {
-//
-//            String sql = "UPDATE " + stock.getTableName() + " SET " +
-//                    DBConstants.MACD_COL_EMA12 + " = " + entry.getValue().getEma12() + ", " +
-//                    DBConstants.MACD_COL_EMA26 + " = " + entry.getValue().getEma26() + ", " +
-//                    DBConstants.MACD_COL_DIFF + " = " + entry.getValue().getDiff() + ", " +
-//                    DBConstants.MACD_COL_DEA + " = " + entry.getValue().getDea() + ", " +
-//                    DBConstants.MACD_COL_BAR + " = " + entry.getValue().getBar() +
-//                    " WHERE date = '" + entry.getKey() + "';";
-//            excute(sql);
-//        }
-//
-//
-//        long endTime = System.currentTimeMillis();
-//        System.out.println("Time consumed (add and update MACD of " + stock.getCode() + "): " + (endTime - startTime) / 1000.0 + "s");
-//
-//    }
-
-    public static void addAndUpdateIndex(AbstractIndex index, Stock stock){
+    public static void addAndUpdateIndex(AbstractIndex index){
         long startTime = System.currentTimeMillis();
 
         List<ColInfo> colInfos = index.getDbColInfos();
         for(ColInfo colInfo : colInfos){
-            addColumn(stock.getTableName(), colInfo);
+            addColumn(index.getStock().getTableName(), colInfo);
         }
-        List<AbstractIndex> historyIndex = Calculator.calHistoryIndex(getHistory(stock), index);
+        List<AbstractIndex> historyIndex = Calculator.calHistoryIndex(getHistory(index.getStock()), index);
 
         updateTable(historyIndex);
 
         long endTime = System.currentTimeMillis();
-        System.out.println("Time consumed (add and update "+index.getClass().getSimpleName() +" of " + stock.getCode() + "): " + (endTime - startTime) / 1000.0 + "s");
+        System.out.println("Time consumed (add and update "+index.getClass().getSimpleName() +" of " + index.getStock().getCode() + "): " + (endTime - startTime) / 1000.0 + "s");
 
     }
 
