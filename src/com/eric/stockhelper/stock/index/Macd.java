@@ -7,9 +7,15 @@ package com.eric.stockhelper.stock.index;
  |           Created by lliyu on 8/7/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
+import com.eric.stockhelper.db.DBConstants;
+import com.eric.stockhelper.db.table.ColInfo;
+import com.eric.stockhelper.stock.Stock;
 import com.eric.stockhelper.stock.StockMetaData;
 
-public class Macd {
+import java.sql.Date;
+import java.util.*;
+
+public class Macd extends AbstractIndex {
 
     private double ema12;
     private double ema26;
@@ -38,24 +44,9 @@ public class Macd {
         return bar;
     }
 
-    public void setEma12(double ema12) {
-        this.ema12 = ema12;
-    }
-
-    public void setEma26(double ema26) {
-        this.ema26 = ema26;
-    }
-
-    public void setDiff(double diff) {
-        this.diff = diff;
-    }
-
-    public void setDea(double dea) {
-        this.dea = dea;
-    }
-
-    public void setBar(double bar) {
-        this.bar = bar;
+    public Macd(Stock stock, Date date) {
+        super(stock, date);
+        setDBColInfo();
     }
 
     @Override
@@ -69,22 +60,80 @@ public class Macd {
                 '}';
     }
 
+    public static Macd calMacd(Macd macd_yesterday, StockMetaData metaData_today) {
 
-    public void setMacd(Macd macd_yesterday, StockMetaData metaData_today) {
+        Macd ret = null;
+
         if (metaData_today != null) {
+            ret = new Macd(metaData_today.getStock(), metaData_today.getDate());
             if (macd_yesterday == null) {
-                ema12 = Calculator.cutDecimal(metaData_today.getAdjust_close(), 5);
-                ema26 = Calculator.cutDecimal(metaData_today.getAdjust_close(), 5);
-                diff = 0;
-                dea = 0;
-                bar = 0;
+                ret.ema12 = Calculator.cutDecimal(metaData_today.getAdjust_close(), 5);
+                ret.ema26 = Calculator.cutDecimal(metaData_today.getAdjust_close(), 5);
+                ret.diff = 0;
+                ret.dea = 0;
+                ret.bar = 0;
             } else {
-                ema12 = Calculator.cutDecimal(macd_yesterday.getEma12() + (metaData_today.getAdjust_close() - macd_yesterday.getEma12()) * 2.0 / 13.0, 5);
-                ema26 = Calculator.cutDecimal(macd_yesterday.getEma26() + (metaData_today.getAdjust_close() - macd_yesterday.getEma26()) * 2.0 / 27.0, 5);
-                diff = Calculator.cutDecimal(ema26 - ema12, 5);
-                dea = Calculator.cutDecimal(macd_yesterday.getDea() + (diff - macd_yesterday.getDea()) * 2.0 / 10.0, 5);
-                bar = Calculator.cutDecimal(2.0 * (diff - dea), 5);
+                ret.ema12 = Calculator.cutDecimal(macd_yesterday.getEma12() + (metaData_today.getAdjust_close() - macd_yesterday.getEma12()) * 2.0 / 13.0, 5);
+                ret.ema26 = Calculator.cutDecimal(macd_yesterday.getEma26() + (metaData_today.getAdjust_close() - macd_yesterday.getEma26()) * 2.0 / 27.0, 5);
+                ret.diff = Calculator.cutDecimal(ret.ema26 - ret.ema12, 5);
+                ret.dea = Calculator.cutDecimal(macd_yesterday.getDea() + (ret.diff - macd_yesterday.getDea()) * 2.0 / 10.0, 5);
+                ret.bar = Calculator.cutDecimal(2.0 * (ret.diff - ret.dea), 5);
             }
         }
+        return ret;
+    }
+
+    public void setMacd(Macd macd_yesterday, StockMetaData metaData_today) {
+        Macd macd = calMacd(macd_yesterday, metaData_today);
+        ema12 = macd.getEma12();
+        ema26 = macd.getEma26();
+        diff = macd.getDiff();
+        dea = macd.getDea();
+        bar = macd.getBar();
+    }
+
+
+    @Override
+    void setDBColInfo() {
+        dbColInfos.add(new ColInfo(DBConstants.MACD_COL_EMA12, DBConstants.MACD_COL_EMA12_TYPE));
+        dbColInfos.add(new ColInfo(DBConstants.MACD_COL_EMA26, DBConstants.MACD_COL_EMA26_TYPE));
+        dbColInfos.add(new ColInfo(DBConstants.MACD_COL_DIFF, DBConstants.MACD_COL_DIFF_TYPE));
+        dbColInfos.add(new ColInfo(DBConstants.MACD_COL_DEA, DBConstants.MACD_COL_DEA_TYPE));
+        dbColInfos.add(new ColInfo(DBConstants.MACD_COL_BAR, DBConstants.MACD_COL_BAR_TYPE));
+    }
+
+    @Override
+    public Map<String, Double> getIndexValues() {
+        Map<String, Double> ret = new LinkedHashMap<>();
+        ret.put(DBConstants.MACD_COL_EMA12, ema12);
+        ret.put(DBConstants.MACD_COL_EMA26, ema26);
+        ret.put(DBConstants.MACD_COL_DIFF, diff);
+        ret.put(DBConstants.MACD_COL_DEA, dea);
+        ret.put(DBConstants.MACD_COL_BAR, bar);
+        return ret;
+    }
+
+    @Override
+    List<AbstractIndex> calHistoryIndex(List<StockMetaData> metaDatas) {
+        List<AbstractIndex> ret = new ArrayList<>();
+
+        if (metaDatas != null && metaDatas.size() > 0) {
+            int size = metaDatas.size();
+
+            StockMetaData metaData_fisrtDay = metaDatas.get(size - 1);
+            Macd macd = new Macd(metaData_fisrtDay.getStock(), metaData_fisrtDay.getDate());
+            macd.setMacd(null, metaData_fisrtDay);
+            ret.add(macd);
+
+            for (int i = 1; i < size; ++i) {
+                StockMetaData metaDataToday = metaDatas.get(size - i - 1);
+                Macd yesterday = (Macd) ret.get(ret.size() - 1);
+
+                Macd macd_today = new Macd(metaDataToday.getStock(), metaDataToday.getDate());
+                macd_today.setMacd(yesterday, metaDataToday);
+                ret.add(macd_today);
+            }
+        }
+        return ret;
     }
 }

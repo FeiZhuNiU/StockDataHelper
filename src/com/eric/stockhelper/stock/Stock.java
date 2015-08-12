@@ -10,6 +10,7 @@ package com.eric.stockhelper.stock;
 import com.eric.stockhelper.db.DBConstants;
 
 public class Stock {
+
     private String name;
     private int code;
     private CompanyInfo companyInfo;

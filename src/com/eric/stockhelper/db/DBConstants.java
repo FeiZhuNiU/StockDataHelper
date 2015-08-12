@@ -15,6 +15,9 @@ public class DBConstants {
     public final static String TABLE_SH_PRE = "sh";
     public final static String TABLE_BIG_NAME = "big_table";
 
+    public final static String MA_COL_PREFIX = "ma";
+    public final static String MA_COL_TYPE = "VARCHAR(20)";
+
     public static final String MACD_COL_EMA12 = "macd_ema12";
     public static final String MACD_COL_EMA26 = "macd_ema26";
     public static final String MACD_COL_DIFF = "macd_diff";
