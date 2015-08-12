@@ -1,4 +1,4 @@
-package com.eric.stockhelper.db;
+package com.eric.stka.db;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -8,14 +8,12 @@ package com.eric.stockhelper.db;
  +===========================================================================*/
 
 
-import com.eric.stockhelper.db.table.*;
-import com.eric.stockhelper.internet.NetUtils;
-import com.eric.stockhelper.stock.Stock;
-import com.eric.stockhelper.stock.index.AbstractIndex;
-import com.eric.stockhelper.stock.index.Calculator;
-import com.eric.stockhelper.stock.index.Ma;
-import com.eric.stockhelper.stock.index.Macd;
-import com.eric.stockhelper.stock.StockMetaData;
+import com.eric.stka.db.table.*;
+import com.eric.stka.internet.NetUtils;
+import com.eric.stka.stock.Stock;
+import com.eric.stka.stock.index.AbstractIndex;
+import com.eric.stka.stock.index.Calculator;
+import com.eric.stka.stock.StockMetaData;
 
 import java.io.BufferedReader;
 import java.io.File;

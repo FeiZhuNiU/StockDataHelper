@@ -1,4 +1,4 @@
-package com.eric.stockhelper;
+package com.eric.stka;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,13 +7,12 @@ package com.eric.stockhelper;
  |           Created by lliyu on 8/3/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import com.eric.stockhelper.internet.NetUtils;
-import com.eric.stockhelper.stock.Stock;
-import com.eric.stockhelper.db.DBUtils;
-import com.eric.stockhelper.stock.index.Ma;
-import com.eric.stockhelper.stock.index.Macd;
+import com.eric.stka.stock.Stock;
+import com.eric.stka.db.DBUtils;
+import com.eric.stka.stock.index.Ma;
+import com.eric.stka.stock.index.Macd;
 
-public class StockHelper {
+public class StockAnalyzer {
 
     public static void main(String[] args) {
 

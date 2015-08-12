@@ -1,4 +1,4 @@
-package com.eric.stockhelper.db.table;
+package com.eric.stka.db.table;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,23 +7,16 @@ package com.eric.stockhelper.db.table;
  |           Created by lliyu on 8/11/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-
-import com.eric.stockhelper.stock.Stock;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class BigTable extends AbstractTable{
+public interface Table {
 
-    public static List<ColInfo> originCols = new ArrayList<>();
+    List<ColInfo> getColInfos();
 
-    static {
-        originCols.add(new ColInfo("code","INT"));
-        originCols.addAll(new BasicStockTable(new Stock(0)).getColInfos());
-    }
+    String getTableName();
 
-    public BigTable(String table_name) {
-        tableName = table_name;
-        colInfos = new ArrayList<>(originCols);
-    }
+    void addCol(ColInfo colInfo);
+
+    void deleteCol(ColInfo colInfo);
+
 }

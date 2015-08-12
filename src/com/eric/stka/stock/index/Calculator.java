@@ -1,4 +1,4 @@
-package com.eric.stockhelper.stock.index;
+package com.eric.stka.stock.index;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,7 +7,7 @@ package com.eric.stockhelper.stock.index;
  |           Created by lliyu on 8/6/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import com.eric.stockhelper.stock.StockMetaData;
+import com.eric.stka.stock.StockMetaData;
 
 import java.util.List;
 

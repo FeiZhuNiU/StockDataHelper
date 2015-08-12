@@ -1,4 +1,4 @@
-package com.eric.stockhelper.db.table;
+package com.eric.stka.db.table;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,7 +7,7 @@ package com.eric.stockhelper.db.table;
  |           Created by lliyu on 8/11/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import com.eric.stockhelper.stock.Stock;
+import com.eric.stka.stock.Stock;
 
 import java.util.ArrayList;
 import java.util.List;

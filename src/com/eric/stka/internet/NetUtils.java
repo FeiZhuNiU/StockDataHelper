@@ -1,4 +1,4 @@
-package com.eric.stockhelper.internet;
+package com.eric.stka.internet;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |

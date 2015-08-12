@@ -1,4 +1,4 @@
-package com.eric.stockhelper.db.table;
+package com.eric.stka.db.table;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,16 +7,25 @@ package com.eric.stockhelper.db.table;
  |           Created by lliyu on 8/11/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import java.util.List;
+public class ColInfo {
 
-public interface Table {
+    private String col_name;
+    private String col_type;
 
-    List<ColInfo> getColInfos();
+    public ColInfo(String col_name, String col_type) {
+        this.col_name = col_name;
+        this.col_type = col_type;
+    }
 
-    String getTableName();
+//    public Map.Entry<String,String> getColEntry(){
+//        return new AbstractMap.SimpleEntry<String, String>(col_name,col_type);
+//    }
 
-    void addCol(ColInfo colInfo);
+    public String getColName() {
+        return col_name;
+    }
 
-    void deleteCol(ColInfo colInfo);
-
+    public String getColType() {
+        return col_type;
+    }
 }

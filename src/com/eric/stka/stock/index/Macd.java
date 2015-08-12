@@ -1,4 +1,4 @@
-package com.eric.stockhelper.stock.index;
+package com.eric.stka.stock.index;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,10 +7,10 @@ package com.eric.stockhelper.stock.index;
  |           Created by lliyu on 8/7/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
-import com.eric.stockhelper.db.DBConstants;
-import com.eric.stockhelper.db.table.ColInfo;
-import com.eric.stockhelper.stock.Stock;
-import com.eric.stockhelper.stock.StockMetaData;
+import com.eric.stka.db.DBConstants;
+import com.eric.stka.db.table.ColInfo;
+import com.eric.stka.stock.Stock;
+import com.eric.stka.stock.StockMetaData;
 
 import java.sql.Date;
 import java.util.*;

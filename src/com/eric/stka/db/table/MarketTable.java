@@ -1,4 +1,4 @@
-package com.eric.stockhelper.db.table;
+package com.eric.stka.db.table;
 /*===========================================================================+
  |      Copyright (c) 2014 Oracle Corporation, Redwood Shores, CA, USA       |
  |                         All rights reserved.                              |
@@ -7,33 +7,21 @@ package com.eric.stockhelper.db.table;
  |           Created by lliyu on 8/11/2015  (lin.yu@oracle.com)              |
  +===========================================================================*/
 
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractTable implements Table{
+public class MarketTable extends AbstractTable{
 
-    protected String tableName;
+    public static final List<ColInfo> originCols = new ArrayList<>();
 
-    protected List<ColInfo> colInfos;
-
-    @Override
-    public List<ColInfo> getColInfos() {
-        return colInfos;
+    static {
+        originCols.add(new ColInfo("stock_code","INT"));
+        originCols.add(new ColInfo("stock_name","VARCHAR(20)"));
     }
 
-    @Override
-    public String getTableName() {
-        return tableName;
+    public MarketTable(String tableName) {
+        this.tableName = tableName;
+        colInfos = new ArrayList<>(originCols);
     }
 
-    @Override
-    public void addCol(ColInfo colInfo) {
-        if(colInfo!=null)
-            colInfos.add(colInfo);
-    }
-
-    @Override
-    public void deleteCol(ColInfo colInfo) {
-        if(colInfos.contains(colInfo))
-            colInfos.remove(colInfo);
-    }
 }
