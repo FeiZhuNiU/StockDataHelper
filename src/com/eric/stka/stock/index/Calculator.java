@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Calculator {
 
-    public static List<AbstractIndex> calHistoryIndex(List<StockMetaData> metaDatas, AbstractIndex index){
+    public static List<AbstractIndex> calHistoryIndex(List<StockMetaData> metaDatas, AbstractIndex index) {
         return index.calHistoryIndex(metaDatas);
 
     }

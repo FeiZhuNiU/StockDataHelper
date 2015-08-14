@@ -25,7 +25,7 @@ public class NetUtils {
 
 
     /**
-     * @param code    the stock code
+     * @param code the stock code
      * @return false if failed to download data
      */
     public static boolean downloadData(int code) {
@@ -47,12 +47,7 @@ public class NetUtils {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
 
             System.out.println("response code: " + connection.getResponseCode());
-//            Map<String,List<String>> map = connection.getHeaderFields();
-//
-//            for(Map.Entry<String,List<String>> entry : map.entrySet())
-//            {
-//                System.out.println("key: " + entry.getKey()+ " , Value:" + entry.getValue());
-//            }
+
             is = connection.getInputStream();
 
             fos = new FileOutputStream(saveDir);

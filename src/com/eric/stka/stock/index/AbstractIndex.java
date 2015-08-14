@@ -16,7 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractIndex{
+/**
+ * create new index steps:
+ * <p/>
+ * 1.  create a index class extends AbstractIndex
+ * 2.  override all the abstract method
+ * 3.  in the constructor
+ * a.  call super(stock,date)
+ * b.  self init
+ * c.  call setDBColInfo()
+ * 4.  you can provide a setXXX method to calculator one day's index
+ */
+
+public abstract class AbstractIndex {
 
     private Date date;
     private Stock stock;
@@ -24,24 +36,25 @@ public abstract class AbstractIndex{
 
 
     /**
-     * set ColInfos related to the concrete index
-     * must be called in constructor of child classes
+     * add ColInfos to dbColInfos
      */
     abstract void setDBColInfo();
 
     /**
-     * @return get all index values
-     * the key of map is the col name in related table
+     * @return Map<col_name,index_value>
      */
-    public abstract Map<String,Double> getIndexValues();
+    public abstract Map<String, Double> getIndexValues();
 
+    /**
+     * @param metaDatas history metadatas
+     * @return history index
+     */
     abstract List<AbstractIndex> calHistoryIndex(List<StockMetaData> metaDatas);
 
     public AbstractIndex(Stock stock, Date date) {
         this.stock = stock;
         this.date = date;
         dbColInfos = new ArrayList<>();
-
     }
 
     public List<ColInfo> getDbColInfos() {

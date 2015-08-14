@@ -14,7 +14,7 @@ import com.eric.stka.stock.index.Macd;
 
 public class StockAnalyzer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         DBUtils.connectDB();
         DBUtils.resetTables();
@@ -25,17 +25,13 @@ public class StockAnalyzer {
 
             Stock stock = new Stock(stockCode);
             DBUtils.downloadDataToDB(stock);
-            Ma ma = new Ma(stock,null,5);
+            Ma ma = new Ma(stock, null, 5);
             DBUtils.addAndUpdateIndex(ma);
-            Macd macd = new Macd(stock,null);
+            Macd macd = new Macd(stock, null, 12, 26, 9);
             DBUtils.addAndUpdateIndex(macd);
 
         }
 
         DBUtils.disConnectDB();
-
     }
-
-
-
 }

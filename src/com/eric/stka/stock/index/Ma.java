@@ -21,14 +21,14 @@ public class Ma extends AbstractIndex {
     private double maValue;
 
     public Ma(Stock stock, Date date, int days) {
-        super(stock,date);
+        super(stock, date);
         this.days = days;
         setDBColInfo();
     }
 
     public void setMA(List<StockMetaData> list) {
         if (list == null || list.size() != days) {
-            System.out.println("history data provided for calculating MA is not correct!");
+            maValue = 0.0;
             return;
         }
         double sum = 0.0;
@@ -86,12 +86,12 @@ public class Ma extends AbstractIndex {
 //                if (i + days < metaDatas.size())
 //                    sum += metaDatas.get(i + days).getAdjust_close();
 //            }
-            for(int i = 0 ; i <=metaDatas.size()-days;++i){
+            for (int i = 0; i <= metaDatas.size() - days; ++i) {
                 StockMetaData metaData = metaDatas.get(i);
-                Ma ma = new Ma(metaData.getStock(),metaData.getDate(),days);
+                Ma ma = new Ma(metaData.getStock(), metaData.getDate(), days);
                 List<StockMetaData> metaDataList = new ArrayList<>();
-                for(int j = 0 ; j < days; ++j){
-                    metaDataList.add(metaDatas.get(i+j));
+                for (int j = 0; j < days; ++j) {
+                    metaDataList.add(metaDatas.get(i + j));
                 }
                 ma.setMA(metaDataList);
                 ret.add(ma);

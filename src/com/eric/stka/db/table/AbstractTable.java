@@ -9,7 +9,7 @@ package com.eric.stka.db.table;
 
 import java.util.List;
 
-public abstract class AbstractTable implements Table{
+public abstract class AbstractTable implements Table {
 
     protected String tableName;
 
@@ -27,13 +27,13 @@ public abstract class AbstractTable implements Table{
 
     @Override
     public void addCol(ColInfo colInfo) {
-        if(colInfo!=null)
+        if (colInfo != null)
             colInfos.add(colInfo);
     }
 
     @Override
     public void deleteCol(ColInfo colInfo) {
-        if(colInfos.contains(colInfo))
+        if (colInfos.contains(colInfo))
             colInfos.remove(colInfo);
     }
 }

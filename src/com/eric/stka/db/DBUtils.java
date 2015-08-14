@@ -236,11 +236,11 @@ public class DBUtils {
         return ret;
     }
 
-    public static void addAndUpdateIndex(AbstractIndex index){
+    public static void addAndUpdateIndex(AbstractIndex index) {
         long startTime = System.currentTimeMillis();
 
         List<ColInfo> colInfos = index.getDbColInfos();
-        for(ColInfo colInfo : colInfos){
+        for (ColInfo colInfo : colInfos) {
             addColumn(index.getStock().getTableName(), colInfo);
         }
         List<AbstractIndex> historyIndex = Calculator.calHistoryIndex(getHistory(index.getStock()), index);
@@ -248,23 +248,24 @@ public class DBUtils {
         updateTable(historyIndex);
 
         long endTime = System.currentTimeMillis();
-        System.out.println("Time consumed (add and update "+index.getClass().getSimpleName() +" of " + index.getStock().getCode() + "): " + (endTime - startTime) / 1000.0 + "s");
+        System.out.println("Time consumed (add and update " + index.getClass().getSimpleName() + " of " + index.getStock().getCode() + "): " + (endTime - startTime) / 1000.0 + "s");
 
     }
 
     private static void updateTable(List<AbstractIndex> historyIndex) {
-        for(AbstractIndex index : historyIndex){
-            Map<String,Double> indexValues = index.getIndexValues();
+        for (AbstractIndex index : historyIndex) {
+            Map<String, Double> indexValues = index.getIndexValues();
             String sql = "UPDATE " + index.getStock().getTableName() + " SET ";
-            Set<Map.Entry<String,Double>> indexSet = indexValues.entrySet();
-            for(Map.Entry<String,Double> entry : indexSet) {
+            Set<Map.Entry<String, Double>> indexSet = indexValues.entrySet();
+            for (Map.Entry<String, Double> entry : indexSet) {
                 sql += (entry.getKey() + " = " + entry.getValue() + ", ");
             }
-            sql = sql.substring(0,sql.length()-2);
-            sql += " WHERE date = '" + index.getDate() + "'" ;
+            sql = sql.substring(0, sql.length() - 2);
+            sql += " WHERE date = '" + index.getDate() + "'";
             excute(sql);
         }
     }
+
     public static void downloadDataToDB(Stock stock) {
 
         if (NetUtils.downloadData(stock.getCode())) {

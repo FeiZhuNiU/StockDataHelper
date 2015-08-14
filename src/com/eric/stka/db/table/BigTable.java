@@ -13,12 +13,12 @@ import com.eric.stka.stock.Stock;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BigTable extends AbstractTable{
+public class BigTable extends AbstractTable {
 
     public static List<ColInfo> originCols = new ArrayList<>();
 
     static {
-        originCols.add(new ColInfo("code","INT"));
+        originCols.add(new ColInfo("code", "INT"));
         originCols.addAll(new BasicStockTable(new Stock(0)).getColInfos());
     }
 

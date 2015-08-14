@@ -12,7 +12,7 @@ import com.eric.stka.stock.Stock;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicStockTable extends AbstractTable{
+public class BasicStockTable extends AbstractTable {
 
     public static final List<ColInfo> originCols = new ArrayList<>();
 

@@ -9,8 +9,7 @@ package com.eric.stka.db;
 
 public class DBConstants {
 
-
-    public final static String DB_URL = "jdbc:mysql://localhost:3306/stockdb?user=lliyu&password=2222";
+    public final static String DB_URL = "jdbc:mysql://10.182.251.245:3306/stockdb?user=lliyu&password=2222";
     public final static String TABLE_MARKET_NAME = "market";
     public final static String TABLE_SH_PRE = "sh";
     public final static String TABLE_BIG_NAME = "big_table";
